@@ -1,5 +1,5 @@
 {{-- resources/views/auth/otp-verification.blade.php --}}
-@extends('layouts.guest')
+@extends('layouts.app')
 
 @section('title', 'OTP Verification')
 
