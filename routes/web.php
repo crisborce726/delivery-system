@@ -9,7 +9,9 @@ use App\Http\Controllers\UserDashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DriverController;
+use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\DeliveryController as AdminDeliveryController;
 
 // Public Routes - Show Welcome Page
 Route::get('/', function () {
@@ -46,15 +48,6 @@ Route::middleware(['auth',])->group(function () {
     }
 });
 
-// ✅ PROTECTED USER ROUTES (with UserMiddleware)
-
-// Protected routes for authenticated users
-Route::middleware(['auth', 'user'])->group(function () {
-    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
-    Route::get('/profile', [ProfileController::class, 'show'])->name('user.profile.show');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user.profile.edit');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
-});
 
 // ✅ PROTECTED ADMIN ROUTES (with AdminMiddleware)
 Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
@@ -75,4 +68,29 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
 
 Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
     Route::resource('categories', CategoryController::class)->names('admin.categories');
+
+
+    Route::get('/deliveries', [AdminDeliveryController::class, 'index'])->name('admin.deliveries.index');
+    Route::post('/deliveries/{delivery}/assign-driver', [AdminDeliveryController::class, 'assignDriver'])
+        ->name('admin.deliveries.assignDriver');
+});
+
+
+// ✅ PROTECTED USER ROUTES (with UserMiddleware)
+
+// Protected routes for authenticated users
+Route::middleware(['auth', 'user'])->group(function () {
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('user.profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user.profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
+
+    Route::get('/user/deliveries', [DeliveryController::class, 'index'])
+        ->name('user.deliveries.index');
+
+    Route::get('/user/deliveries/create', [DeliveryController::class, 'create'])
+        ->name('user.deliveries.create');
+
+    Route::post('/user/deliveries', [DeliveryController::class, 'store'])
+        ->name('user.deliveries.store');
 });

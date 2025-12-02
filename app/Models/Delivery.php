@@ -13,19 +13,20 @@ class Delivery extends Model
 
     protected $fillable = [
         'user_id',
+        'category_id',   // ← missing comma fixed
         'tracking_number',
         'description',
         'delivery_address',
-        'delivered_at'
+        'status',
+        'delivered_at',
     ];
 
     protected $casts = [
-        'estimated_delivery' => 'datetime',
         'delivered_at' => 'datetime',
     ];
 
     /**
-     * Get the user that owns the delivery.
+     * Belongs to: User
      */
     public function user(): BelongsTo
     {
@@ -33,80 +34,46 @@ class Delivery extends Model
     }
 
     /**
-     * MANY-TO-MANY: Delivery can have multiple drivers
+     * Belongs to: Category
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * MANY-TO-MANY: Delivery can have multiple drivers via delivery_driver table
      */
     public function drivers(): BelongsToMany
     {
         return $this->belongsToMany(Driver::class, 'delivery_driver')
-                    ->withPivot('assignment_status', 'assigned_at', 'completed_at', 'notes')
-                    ->withTimestamps();
+            ->withPivot('assignment_status', 'completed_at', 'notes')
+            ->withTimestamps();
     }
 
     /**
-     * Check if delivery is pending.
+     * Check status helpers
      */
     public function isPending(): bool
     {
         return $this->status === 'pending';
     }
 
-    /**
-     * Check if delivery is in transit.
-     */
     public function isInTransit(): bool
     {
         return $this->status === 'in_transit';
     }
 
-    /**
-     * Check if delivery is delivered.
-     */
     public function isDelivered(): bool
     {
         return $this->status === 'delivered';
     }
 
-    /**
-     * Check if delivery is cancelled.
-     */
     public function isCancelled(): bool
     {
         return $this->status === 'cancelled';
     }
 
-    /**
-     * Get assigned drivers count
-     */
-    public function getAssignedDriversCount(): int
-    {
-        return $this->drivers()->count();
-    }
-
-    /**
-     * Get active assigned drivers (not completed/cancelled)
-     */
-    public function getActiveDrivers()
-    {
-        return $this->drivers()
-                    ->wherePivotIn('assignment_status', ['assigned', 'in_progress'])
-                    ->get();
-    }
-
-    /**
-     * Assign a driver to this delivery
-     */
-    public function assignDriver(Driver $driver, string $notes = null): void
-    {
-        $this->drivers()->attach($driver->id, [
-            'assignment_status' => 'assigned',
-            'notes' => $notes,
-            'assigned_at' => now()
-        ]);
-    }
-
-    /**
-     * Generate a unique tracking number.
-     */
     public static function generateTrackingNumber(): string
     {
         do {

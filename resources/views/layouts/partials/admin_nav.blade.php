@@ -14,15 +14,19 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{  route('admin.users.index') }}">Users</a>
+                    <a class="nav-link" href="{{ route('admin.users.index') }}">Users</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{  route('admin.drivers.index') }}">Drivers</a>
+                    <a class="nav-link" href="{{ route('admin.drivers.index') }}">Drivers</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{  route('admin.categories.index') }}">Categories</a>
+                    <a class="nav-link" href="{{ route('admin.categories.index') }}">Categories</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.deliveries.index') }}">Deliveries</a>
                 </li>
 
             </ul>

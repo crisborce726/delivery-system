@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Edit Driver')
+
 @section('content')
     <div class="container">
 

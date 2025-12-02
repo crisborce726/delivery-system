@@ -8,7 +8,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/user/deliveries">My Deliveries</a>
+                    <a class="nav-link" href="{{ route('user.deliveries.index') }}">My Deliveries</a>
                 </li>
 
                 <li class="nav-item">

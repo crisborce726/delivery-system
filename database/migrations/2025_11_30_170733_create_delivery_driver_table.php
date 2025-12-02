@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('delivery_id')->constrained()->onDelete('cascade');
             $table->foreignId('driver_id')->constrained()->onDelete('cascade');
-            $table->enum('assignment_status', ['assigned', 'in_progress', 'completed', 'cancelled'])->default('assigned');
+            $table->enum('assignment_status', ['assigned', 'in_transit', 'completed', 'cancelled'])->default('assigned');
             $table->timestamp('completed_at')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();

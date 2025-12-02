@@ -37,6 +37,11 @@ class UserController extends Controller
             ->with('success', 'User created successfully.');
     }
 
+    public function show(User $user)
+    {
+        return view('admin.users.show', compact('user'));
+    }
+
     // Edit form
     public function edit(User $user)
     {

@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Users Management')
+
 @section('content')
     <div class="container">
         <h2 class="mb-3">All Users</h2>
@@ -9,7 +11,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
-                    <th width="200">Actions</th>
+                    <th width="250">Actions</th>
                 </tr>
             </thead>
 
@@ -20,14 +22,21 @@
                         <td>{{ $user->email }}</td>
 
                         <td>
-                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            {{-- View Details --}}
+                            <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-info btn-sm">
+                                View Details
+                            </a>
 
+                            {{-- Edit --}}
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm">
+                                Edit
+                            </a>
+
+                            {{-- Delete --}}
                             <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-danger btn-sm">
-                                    Delete
-                                </button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
                             </form>
                         </td>
                     </tr>

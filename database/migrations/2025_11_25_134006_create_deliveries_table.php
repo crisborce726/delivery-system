@@ -16,12 +16,14 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('tracking_number')->unique();
             $table->string('description');
+            $table->enum('status', ['pending', 'in_transit', 'delivered', 'cancelled'])->default('pending');
             $table->text('delivery_address');
             $table->timestamp('delivered_at')->nullable();
             $table->timestamps();
             
             // Add index for better performance
             $table->index('user_id');
+            $table->index('status');
             $table->index('tracking_number');
         });
     }

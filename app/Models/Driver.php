@@ -29,18 +29,8 @@ class Driver extends Model
     public function deliveries(): BelongsToMany
     {
         return $this->belongsToMany(Delivery::class, 'delivery_driver')
-                    ->withPivot('assignment_status', 'assigned_at', 'completed_at', 'notes')
-                    ->withTimestamps();
-    }
-
-    /**
-     * Get active deliveries count
-     */
-    public function getActiveDeliveriesCount(): int
-    {
-        return $this->deliveries()
-                    ->wherePivotIn('assignment_status', ['assigned', 'in_progress'])
-                    ->count();
+            ->withPivot('assignment_status', 'assigned_at', 'completed_at', 'notes')
+            ->withTimestamps();
     }
 
     /**
@@ -48,7 +38,13 @@ class Driver extends Model
      */
     public function isAvailable(): bool
     {
-        return $this->is_available && $this->getActiveDeliveriesCount() < 3; // Max 3 active deliveries
+        // Count deliveries that are currently assigned or in progress
+        $activeDeliveriesCount = $this->deliveries()
+            ->wherePivotIn('assignment_status', ['assigned', 'in_progress'])
+            ->count();
+
+        // Driver is available if marked available and has less than 3 active deliveries
+        return $this->is_available && $activeDeliveriesCount < 3;
     }
 
     /**
@@ -57,7 +53,7 @@ class Driver extends Model
     public function getCompletedDeliveriesCount(): int
     {
         return $this->deliveries()
-                    ->wherePivot('assignment_status', 'completed')
-                    ->count();
+            ->wherePivot('assignment_status', 'completed')
+            ->count();
     }
 }
