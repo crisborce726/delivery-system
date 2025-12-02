@@ -15,9 +15,7 @@ class Delivery extends Model
         'user_id',
         'tracking_number',
         'description',
-        'status',
         'delivery_address',
-        'estimated_delivery',
         'delivered_at'
     ];
 

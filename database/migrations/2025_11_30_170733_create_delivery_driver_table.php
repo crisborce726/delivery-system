@@ -13,18 +13,9 @@ return new class extends Migration
             $table->foreignId('delivery_id')->constrained()->onDelete('cascade');
             $table->foreignId('driver_id')->constrained()->onDelete('cascade');
             $table->enum('assignment_status', ['assigned', 'in_progress', 'completed', 'cancelled'])->default('assigned');
-            $table->timestamp('assigned_at')->useCurrent();
             $table->timestamp('completed_at')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
-
-            // Prevent duplicate assignments
-            $table->unique(['delivery_id', 'driver_id']);
-            
-            // Indexes for better performance
-            $table->index('delivery_id');
-            $table->index('driver_id');
-            $table->index('assignment_status');
         });
     }
 
